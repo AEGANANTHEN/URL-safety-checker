@@ -25,7 +25,9 @@ function App() {
   const [animatedScore, setAnimatedScore] = useState(0);
 
   const checkURL = async () => {
-    if (!url.trim()) return;
+    if (!url.trim()) {
+      return;
+    }
 
     setLoading(true);
     setData(null);
@@ -43,7 +45,7 @@ function App() {
 
       const result: AnalysisResult = await response.json();
       setData(result);
-    } catch (err) {
+    } catch (error) {
       setData({
         error: "Server connection failed.",
         score: 0,
@@ -65,7 +67,7 @@ function App() {
     setLoading(false);
   };
 
-  /* Animate Score Bar */
+  /* Animate Risk Bar */
   useEffect(() => {
     if (data && !data.error) {
       let start = 0;
@@ -93,7 +95,7 @@ function App() {
 
   return (
     <div className="container">
-      <h1>🔍 URL Safety Checker</h1>
+      <h1>URL Safety Checker</h1>
 
       {/* Input Section */}
       <div className="input-group">
@@ -109,9 +111,13 @@ function App() {
       </div>
 
       {/* Error Display */}
-      {data?.error && <div className="error-box">❌ {data.error}</div>}
+      {data?.error && (
+        <div className="error-box">
+           {data.error}
+        </div>
+      )}
 
-      {/* Result Card */}
+      {/* Result Section */}
       {data && !data.error && (
         <div
           className={`result-card ${
@@ -135,8 +141,8 @@ function App() {
           <h3 style={{ color }}>Risk Level: {data.riskLevel}</h3>
           <h3>Classification: {data.classification}</h3>
 
-          {/* Reasons */}
-          <ul>
+          {/* Reasons (Properly Aligned Bullets) */}
+          <ul className="reason-list">
             {data.reasons.map((reason, index) => (
               <li key={index}>{reason}</li>
             ))}
@@ -145,7 +151,7 @@ function App() {
           <hr />
 
           {/* Domain Info */}
-          <h3>🔎 Domain Information</h3>
+          <h3> Domain Information</h3>
           <div className="info-panel">
             <p><strong>Protocol:</strong> {data.domainInfo.protocol}</p>
             <p><strong>Hostname:</strong> {data.domainInfo.hostname}</p>
@@ -157,7 +163,7 @@ function App() {
           <hr />
 
           {/* Score Breakdown */}
-          <h3>📊 Score Breakdown</h3>
+          <h3>Score Breakdown</h3>
           <div className="breakdown">
             {data.breakdown.map((item, index) => (
               <div key={index} className="breakdown-item">
@@ -169,7 +175,7 @@ function App() {
           <hr />
 
           {/* Threat Summary */}
-          <h3>🧠 Threat Intelligence Summary</h3>
+          <h3>Threat Intelligence Summary</h3>
           <div className="threat-box">
             {data.riskLevel === "High" &&
               "This URL contains multiple phishing indicators including suspicious keywords, insecure protocol usage, and structural anomalies. It is strongly recommended to avoid interacting with this link."}

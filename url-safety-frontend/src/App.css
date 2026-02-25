@@ -221,3 +221,19 @@ hr {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+.reason-list {
+  list-style-type: disc;
+  padding-left: 20px;
+  text-align: left;
+  margin-top: 15px;
+  line-height: 1.8;
+}
+
+.reason-list li {
+  margin-bottom: 6px;
+}
+
+.reason-list li::marker {
+  color: #93c5fd;
+}
