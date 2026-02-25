@@ -43,7 +43,7 @@ This project is designed to:
 - Node.js
 - Express.js
 - CORS Middleware
-- 
+  
 # Project Structure
 URL-safety-checker/
 │
