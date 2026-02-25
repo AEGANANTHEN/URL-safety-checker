@@ -32,11 +32,14 @@ function App() {
     setAnimatedScore(0);
 
     try {
-      const response = await fetch("/api/check", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL || ""}/api/check`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url }),
+        }
+      );
 
       const result: AnalysisResult = await response.json();
       setData(result);
@@ -62,10 +65,7 @@ function App() {
     setLoading(false);
   };
 
-  /* ============================= */
   /* Animate Score Bar */
-  /* ============================= */
-
   useEffect(() => {
     if (data && !data.error) {
       let start = 0;
@@ -93,11 +93,6 @@ function App() {
 
   return (
     <div className="container">
-      {/* Cyber Badge */}
-      <div className="cyber-badge">
-        🛡 Powered by Threat Intelligence Engine v1.0
-      </div>
-
       <h1>🔍 URL Safety Checker</h1>
 
       {/* Input Section */}
@@ -114,11 +109,7 @@ function App() {
       </div>
 
       {/* Error Display */}
-      {data?.error && (
-        <div className="error-box">
-          ❌ {data.error}
-        </div>
-      )}
+      {data?.error && <div className="error-box">❌ {data.error}</div>}
 
       {/* Result Card */}
       {data && !data.error && (
@@ -127,9 +118,6 @@ function App() {
             data.riskLevel === "High" ? "danger-glow" : ""
           }`}
         >
-          {/* Scan Overlay */}
-          {loading && <div className="scan-overlay"></div>}
-
           {/* Risk Bar */}
           <div className="risk-bar-container">
             <div
@@ -170,26 +158,32 @@ function App() {
 
           {/* Score Breakdown */}
           <h3>📊 Score Breakdown</h3>
-          <ul className="breakdown">
+          <div className="breakdown">
             {data.breakdown.map((item, index) => (
-              <li key={index}>{item}</li>
+              <div key={index} className="breakdown-item">
+                {item}
+              </div>
             ))}
-          </ul>
+          </div>
 
           <hr />
 
-          {/* Threat Intelligence Summary */}
+          {/* Threat Summary */}
           <h3>🧠 Threat Intelligence Summary</h3>
           <div className="threat-box">
             {data.riskLevel === "High" &&
               "This URL contains multiple phishing indicators including suspicious keywords, insecure protocol usage, and structural anomalies. It is strongly recommended to avoid interacting with this link."}
 
             {data.riskLevel === "Medium" &&
-              "This URL shows characteristics that are sometimes associated with phishing attempts. Exercise caution before entering sensitive information."}
+              "This URL shows characteristics associated with phishing attempts. Proceed carefully before entering sensitive information."}
 
             {data.riskLevel === "Low" &&
-              "No strong phishing indicators detected. However, always verify website authenticity before sharing sensitive information."}
+              "No major phishing indicators detected. Always verify authenticity before sharing sensitive information."}
           </div>
+
+          <p className="scan-time">
+            Scanned at: {new Date(data.analyzedAt).toLocaleString()}
+          </p>
         </div>
       )}
     </div>
